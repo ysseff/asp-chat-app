@@ -10,22 +10,15 @@ namespace MyChatAppBackend.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class ConversationsController : ControllerBase
+    public class ConversationsController(IConversationService conversationService) : ControllerBase
     {
-        private readonly IConversationService _conversationService;
-
-        public ConversationsController(IConversationService conversationService)
-        {
-            _conversationService = conversationService;
-        }
-
         [HttpPost("start")]
         public async Task<IActionResult> StartConversation([FromBody] StartConversationRequest request, CancellationToken cancellationToken)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             try
             {
-                var conversation = await _conversationService.StartConversationAsync(userId, request, cancellationToken);
+                var conversation = await conversationService.StartConversationAsync(userId, request, cancellationToken);
                 return Ok(conversation);
             }
             catch (KeyNotFoundException)
@@ -38,14 +31,14 @@ namespace MyChatAppBackend.Controllers
         public async Task<IActionResult> GetMyConversations(CancellationToken cancellationToken)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var conversations = await _conversationService.GetUserConversationsAsync(userId, cancellationToken);
+            var conversations = await conversationService.GetUserConversationsAsync(userId, cancellationToken);
             return Ok(conversations);
         }
 
         [HttpGet("{conversationId}")]
         public async Task<IActionResult> GetConversation(int conversationId, CancellationToken cancellationToken)
         {
-            var conversation = await _conversationService.GetConversationByIdAsync(conversationId, cancellationToken);
+            var conversation = await conversationService.GetConversationByIdAsync(conversationId, cancellationToken);
             if (conversation == null) return BadRequest();
             return Ok(conversation);
         }
@@ -54,7 +47,7 @@ namespace MyChatAppBackend.Controllers
         public async Task<IActionResult> DeleteConversation(int conversationId, CancellationToken cancellationToken)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var deleted = await _conversationService.DeleteConversationAsync(conversationId, userId, cancellationToken);
+            var deleted = await conversationService.DeleteConversationAsync(conversationId, userId, cancellationToken);
             if (!deleted)
                 return BadRequest("Conversation not found or you are not authorized to delete it.");
     

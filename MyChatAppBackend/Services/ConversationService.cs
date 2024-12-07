@@ -9,22 +9,22 @@ namespace MyChatAppBackend.Services
     public class ConversationService(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
         : IConversationService
     {
-        public async Task<Conversation?> StartConversationAsync(string user1Id, string user2Id, CancellationToken cancellationToken = default)
+        public async Task<ConversationResponse?> StartConversationAsync(string user1Id, string user2Id, CancellationToken cancellationToken = default)
         {
             var existing = await dbContext.Conversations
                 .FirstOrDefaultAsync(c =>
                     (c.User1Id == user1Id && c.User2Id == user2Id) ||
                     (c.User1Id == user2Id && c.User2Id == user1Id), cancellationToken: cancellationToken);
 
-            if (existing != null) return existing;
+            if (existing != null) return await MapToConversationResponse(existing, user1Id, cancellationToken);
 
             var conversation = new Conversation { User1Id = user1Id, User2Id = user2Id };
             dbContext.Conversations.Add(conversation);
             await dbContext.SaveChangesAsync(cancellationToken);
-            return conversation;
+            return await MapToConversationResponse(conversation, user1Id, cancellationToken);
         }
 
-        public async Task<Conversation?> StartConversationAsync(string user1Id, StartConversationRequest request, CancellationToken cancellationToken = default)
+        public async Task<ConversationResponse?> StartConversationAsync(string user1Id, StartConversationRequest request, CancellationToken cancellationToken = default)
         {
             // Find the other user by email or username
             ApplicationUser? otherUser = null;
@@ -47,12 +47,32 @@ namespace MyChatAppBackend.Services
             return await StartConversationAsync(user1Id, otherUser.Id, cancellationToken);
         }
 
-        public async Task<List<Conversation>> GetUserConversationsAsync(string userId, CancellationToken cancellationToken = default)
+        public async Task<List<ConversationResponse>> GetUserConversationsAsync(string userId, CancellationToken cancellationToken = default)
         {
-            return await dbContext.Conversations
+            var conversations = await dbContext.Conversations
                 .Where(c => c.User1Id == userId || c.User2Id == userId)
-                .Include(c => c.Messages)
-                .ToListAsync(cancellationToken: cancellationToken);
+                .ToListAsync(cancellationToken);
+
+            var conversationResponses = new List<ConversationResponse>();
+
+            foreach (var conversation in conversations)
+            {
+                // Determine the other user in the conversation
+                var otherUserId = conversation.User1Id == userId ? conversation.User2Id : conversation.User1Id;
+                var otherUser = await userManager.FindByIdAsync(otherUserId);
+
+                if (otherUser != null)
+                {
+                    conversationResponses.Add(new ConversationResponse
+                    {
+                        ConversationId = conversation.Id,
+                        ReceiverId = otherUser.Id,
+                        ReceiverUsername = otherUser.UserName
+                    });
+                }
+            }
+
+            return conversationResponses;
         }
 
         public async Task<Conversation> GetConversationByIdAsync(int conversationId, CancellationToken cancellationToken = default)
@@ -79,6 +99,20 @@ namespace MyChatAppBackend.Services
             dbContext.Conversations.Remove(conversation);
             await dbContext.SaveChangesAsync(cancellationToken);
             return true;
+        }
+        private async Task<ConversationResponse?> MapToConversationResponse(Conversation conversation, string currentUserId, CancellationToken cancellationToken)
+        {
+            var otherUserId = conversation.User1Id == currentUserId ? conversation.User2Id : conversation.User1Id;
+
+            var otherUser = await userManager.FindByIdAsync(otherUserId);
+            if (otherUser == null) return null;
+
+            return new ConversationResponse
+            {
+                ConversationId = conversation.Id,
+                ReceiverId = otherUser.Id,
+                ReceiverUsername = otherUser.UserName
+            };
         }
     }
 }
