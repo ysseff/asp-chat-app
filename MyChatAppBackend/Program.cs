@@ -1,5 +1,6 @@
 using MyChatAppBackend;
 using MyChatAppBackend.Authentication;
+using MyChatAppBackend.Hubs;
 using MyChatAppBackend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,12 +25,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
 app.UseAuthentication();
 
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapControllers();
+app.MapHub<ChatHub>("/chathub");
+
 
 app.Run();

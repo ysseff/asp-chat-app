@@ -32,7 +32,9 @@ public static class DependencyInjection
         services.AddScoped<IAuthService, AuthService>();
         services.AddSingleton<IJwtProvider, JwtProvider>();
         services.AddScoped<IMessageService, MessageService>();
-
+        services.AddScoped<IUserProfileService, UserProfileService>();
+        services.AddSignalR();
+        
 
         services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
