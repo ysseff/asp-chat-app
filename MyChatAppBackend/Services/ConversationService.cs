@@ -18,7 +18,7 @@ namespace MyChatAppBackend.Services
                     (c.User1Id == user1Id && c.User2Id == user2Id) ||
                     (c.User1Id == user2Id && c.User2Id == user1Id), cancellationToken: cancellationToken);
 
-            if (existing != null) return await MapToConversationResponse(existing, user1Id, cancellationToken);
+            if (existing != null) return null;
 
             var conversation = new Conversation { User1Id = user1Id, User2Id = user2Id };
             dbContext.Conversations.Add(conversation);
