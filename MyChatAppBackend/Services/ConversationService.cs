@@ -11,6 +11,8 @@ namespace MyChatAppBackend.Services
     {
         public async Task<ConversationResponse?> StartConversationAsync(string user1Id, string user2Id, CancellationToken cancellationToken = default)
         {
+            if (user1Id == user2Id) return null;
+            
             var existing = await dbContext.Conversations
                 .FirstOrDefaultAsync(c =>
                     (c.User1Id == user1Id && c.User2Id == user2Id) ||

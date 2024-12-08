@@ -1,17 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using MyChatAppBackend.Contracts;
 
 namespace MyChatAppBackend.Hubs;
 
 public class ChatHub : Hub
 {
-    public async Task SendMessage(string userId, string messageContent)
+    public async Task SendNewConversation(ConversationResponse conversation)
     {
-        await Clients.User(userId).SendAsync("ReceiveMessage", messageContent);
+        await Clients.All.SendAsync("ReceiveNewConversation", conversation);
     }
-    
-    // public override async Task OnConnectedAsync()
-    // {
-    //     await Clients.All.SendAsync("ReceiveMessage", "A new user has joined the chat");
-    // }
 }

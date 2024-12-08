@@ -19,7 +19,7 @@ namespace MyChatAppBackend.Controllers
             try
             {
                 var conversation = await conversationService.StartConversationAsync(userId, request, cancellationToken);
-                return Ok(conversation);
+                return conversation == null ? BadRequest("fuck off") : Ok(conversation);
             }
             catch (KeyNotFoundException)
             {

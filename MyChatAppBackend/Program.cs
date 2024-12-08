@@ -1,7 +1,5 @@
 using MyChatAppBackend;
-using MyChatAppBackend.Authentication;
 using MyChatAppBackend.Hubs;
-using MyChatAppBackend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
