@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -58,6 +59,21 @@ public static class DependencyInjection
                 ValidateAudience = true,
                 ValidAudience = "MyChatAppBackend users",
                 ValidateLifetime = true,
+            };
+        }).AddJwtBearer(o =>
+        {
+            o.SaveToken = true;
+            o.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("7JPdBxSGtQ8FFKjy8KM9y6dwcRNLlTi0")),
+                ValidateIssuer = true,
+                ValidIssuer = "MyChatAppBackend",
+                ValidateAudience = true,
+                ValidAudience = "MyChatAppBackend users",
+                ValidateLifetime = true,
+                // Add the following line to map the `sub` claim from the token to ClaimTypes.NameIdentifier
+                NameClaimType = ClaimTypes.NameIdentifier
             };
         });
         
