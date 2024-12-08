@@ -59,19 +59,9 @@ namespace MyChatAppBackend.Services
 
             foreach (var conversation in conversations)
             {
-                // Determine the other user in the conversation
-                var otherUserId = conversation.User1Id == userId ? conversation.User2Id : conversation.User1Id;
-                var otherUser = await userManager.FindByIdAsync(otherUserId);
-
-                if (otherUser != null)
-                {
-                    conversationResponses.Add(new ConversationResponse
-                    {
-                        ConversationId = conversation.Id,
-                        ReceiverId = otherUser.Id,
-                        ReceiverUsername = otherUser.UserName
-                    });
-                }
+                var response = await MapToConversationResponse(conversation, userId, cancellationToken);
+                if (response != null)
+                    conversationResponses.Add(response);
             }
 
             return conversationResponses;
@@ -104,17 +94,22 @@ namespace MyChatAppBackend.Services
         }
         private async Task<ConversationResponse?> MapToConversationResponse(Conversation conversation, string currentUserId, CancellationToken cancellationToken)
         {
-            var otherUserId = conversation.User1Id == currentUserId ? conversation.User2Id : conversation.User1Id;
-
-            var otherUser = await userManager.FindByIdAsync(otherUserId);
-            if (otherUser == null) return null;
+            var user1 = await userManager.FindByIdAsync(conversation.User1Id);
+            var user2 = await userManager.FindByIdAsync(conversation.User2Id);
+            if (user1 == null || user2 == null) return null;
 
             return new ConversationResponse
             {
                 ConversationId = conversation.Id,
-                ReceiverId = otherUser.Id,
-                ReceiverUsername = otherUser.UserName
+                User1Id = user1.Id,
+                User1Username = user1.UserName,
+                User2Id = user2.Id,
+                User2Username = user2.UserName
             };
         }
+        
+        
     }
+    
+    
 }
