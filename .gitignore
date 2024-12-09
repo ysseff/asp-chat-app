@@ -6,7 +6,7 @@ riderModule.iml
 .idea
 .appsettings.json
 .DS_Store
-# Ignore appsettings.json to keep secrets out of the repo
+# Ignore appsettings.json to keep passwords out of the repo
 appsettings.json
 
 # Ignore environment-specific config files
