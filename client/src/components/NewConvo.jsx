@@ -24,7 +24,7 @@ const NewConvo = ({ togglePopup, updateConversations, conversations }) => {
     const token = localStorage.getItem("userToken"); // Fetch token for SignalR connection
     if (token) {
       const newConnection = new HubConnectionBuilder()
-        .withUrl("https://localhost:7052/chathub", {
+        .withUrl("http://localhost:5002/chathub", {
           accessTokenFactory: () => token, // Provide token for authorization
         })
         .withAutomaticReconnect()
@@ -79,7 +79,7 @@ const NewConvo = ({ togglePopup, updateConversations, conversations }) => {
 
     try {
       const response = await axios.post(
-        "https://localhost:7052/api/Conversations/start",
+        "http://localhost:5002/api/Conversations/start",
         requestPayload,
         {
           headers: {
@@ -96,7 +96,7 @@ const NewConvo = ({ togglePopup, updateConversations, conversations }) => {
         toast.success("Conversation started successfully!");
 
         // Add conversation to the local state
-        updateConversations([...conversations, conversation]);
+        updateConversations([ conversation,...conversations]);
 
         // Notify SignalR hub
         if (connection) {

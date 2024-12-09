@@ -98,8 +98,8 @@
 }
 
 .startConvoBtn:hover {
-  background-color: var(--profile-logout-hover);
-  color:#ffffff;
+  background-color: #a0dcac;
+  color:#000000;
 }
 /* Autofill Styles */
 .newConvoInput:-webkit-autofill {

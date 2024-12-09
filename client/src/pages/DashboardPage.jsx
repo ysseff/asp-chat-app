@@ -7,8 +7,13 @@ import { CiCirclePlus } from "react-icons/ci";
 import "../styles/pages-style/DashboardPage.css";
 import NewConvo from "../components/NewConvo";
 import { BsSend } from "react-icons/bs";
+import { FiMessageSquare } from "react-icons/fi";
+import { LuUserRound } from "react-icons/lu";
+import { MdLogout } from "react-icons/md";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const DashboardPage = () => {
+  const navigate = useNavigate(); // Initialize navigate function
   const [conversations, setConversations] = useState([]);
   const [showNewConvo, setShowNewConvo] = useState(false);
   const [message, setMessage] = useState("");
@@ -16,6 +21,7 @@ const DashboardPage = () => {
   const [selectedConversation, setSelectedConversation] = useState(null);
   const messageInputRef = useRef(null);
   const sendButtonRef = useRef(null);
+  const messagesEndRef = useRef(null);
 
   // Decode token to get userId
   const token = localStorage.getItem("userToken");
@@ -30,12 +36,25 @@ const DashboardPage = () => {
     }
   }
 
+  // Logout function
+  const logout = () => {
+    localStorage.removeItem("userToken"); // Clear token
+    navigate("/login"); // Redirect to login page
+  };
+
+  // Function to scroll to the bottom of the chat
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   // Setup SignalR only when token is available
   useEffect(() => {
     if (!token) return;
 
     const newConnection = new signalR.HubConnectionBuilder()
-      .withUrl("https://localhost:7052/chathub", {
+      .withUrl("http://localhost:5002/chathub", {
         accessTokenFactory: () => token,
       })
       .withAutomaticReconnect()
@@ -60,9 +79,7 @@ const DashboardPage = () => {
               },
             ]);
           } else {
-            // If the message isn't for the currently selected conversation
             console.log("New message for another conversation:", msg);
-            console.log(selectedConversation);
           }
         });
 
@@ -73,11 +90,15 @@ const DashboardPage = () => {
       })
       .catch((err) => console.error("Error starting SignalR connection:", err));
 
-    // Cleanup when component unmounts (optional)
     return () => {
       newConnection.stop();
     };
   }, [token, selectedConversation]);
+
+  // Scroll to bottom when messagesList updates
+  useEffect(() => {
+    scrollToBottom();
+  }, [messagesList]);
 
   // Fetch user's conversations
   const getConversationsMy = async () => {
@@ -87,11 +108,14 @@ const DashboardPage = () => {
         return;
       }
 
-      const response = await axios.get("https://localhost:7052/api/Conversations/my", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        "http://localhost:5002/api/Conversations/my",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (Array.isArray(response.data)) {
         setConversations(response.data);
@@ -121,7 +145,7 @@ const DashboardPage = () => {
       }
 
       const response = await axios.get(
-        `https://localhost:7052/api/Messages/${conversation.conversationId}`,
+        `http://localhost:5002/api/Messages/${conversation.conversationId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -133,6 +157,11 @@ const DashboardPage = () => {
         setMessagesList(response.data);
       } else {
         toast.warning("No messages found for this conversation.");
+      }
+
+      // Focus the message input field when a conversation is selected
+      if (messageInputRef.current) {
+        messageInputRef.current.focus();
       }
     } catch (error) {
       console.error("Error fetching messages:", error);
@@ -156,7 +185,7 @@ const DashboardPage = () => {
 
       try {
         await axios.post(
-          `https://localhost:7052/api/messages/send`,
+          `http://localhost:5002/api/messages/send`,
           {
             conversationId: selectedConversation.conversationId,
             content: message,
@@ -181,6 +210,18 @@ const DashboardPage = () => {
     setShowNewConvo((prevState) => !prevState);
   };
 
+  // Handle "Enter" key press to send message
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      sendMessage(event);
+    }
+  };
+
+  // Generate RoboHash URL for a user
+  const generateProfilePicture = (userId) => {
+    return `https://robohash.org/${userId}?set=set4&size=50x50`;
+  };
+
   return (
     <>
       <section className="chatHome">
@@ -192,26 +233,30 @@ const DashboardPage = () => {
               onClick={togglePopup}
             >
               <div>
-                <div className="icon-conversations">
-                  <CiCirclePlus size={24} />
-                </div>
-                New Conversation
+                <CiCirclePlus size={24} className="icon-conversations" />
+                <span>New Conversation</span>
               </div>
             </button>
-
             {conversations.length > 0 ? (
               conversations.map((conversation, index) => (
                 <div
                   key={index}
                   className={`conversationItem ${
-                    selectedConversation?.conversationId === conversation.conversationId
+                    selectedConversation?.conversationId ===
+                    conversation.conversationId
                       ? "activeConversation"
                       : ""
                   }`}
                   onClick={() => selectConversation(conversation)}
                 >
-                  <i className="fa-regular fa-message"></i>
-                  <p>{userId === conversation.user1Id ? conversation.user2UserName : conversation.user1UserName}</p>
+                  <div className="conversationDetails">
+                    <FiMessageSquare size={24} className="conversationIcon" />
+                    <p>
+                      {userId === conversation.user1Id
+                        ? conversation.user2UserName
+                        : conversation.user1UserName}
+                    </p>
+                  </div>
                 </div>
               ))
             ) : (
@@ -220,62 +265,64 @@ const DashboardPage = () => {
 
             <div className="userActions">
               <div className="Profile">
-                <i className="fa-regular fa-user"></i>
+                <LuUserRound size={20} className="userIcon" />
                 <p>Profile</p>
               </div>
-              <div className="Logout">
-                <i className="fa-solid fa-right-from-bracket"></i>
+              <div className="Logout" onClick={logout}>
+                {" "}
+                {/* Attach logout here */}
+                <MdLogout size={20} className="logoutIcon" />
                 <p>Logout</p>
               </div>
             </div>
           </div>
 
           <div className="chatContent">
-            <div className="chatHeader">
-              <h2>
-                {selectedConversation
-                  ? selectedConversation.receiverUsername
-                  : "Select a conversation or start a new one"}
-              </h2>
-            </div>
-            <ul id="messagesList" className="messagesList">
-              {messagesList.map((msg, index) => {
-                const isUserMessage = String(msg.senderId) === String(userId);
-                return (
-                  <li
-                    key={index}
-                    className={`message ${
-                      isUserMessage ? "userMessage" : "senderMessage"
-                    } fade-in`}
+            {selectedConversation ? (
+              <>
+                <ul id="messagesList" className="messagesList">
+                  {messagesList.map((msg, index) => (
+                    <li
+                      key={index}
+                      className={`message ${
+                        String(msg.senderId) === String(userId)
+                          ? "userMessage"
+                          : "senderMessage"
+                      } fade-in`}
+                    >
+                      <span className="messageContent">
+                        {msg.content || "No content"}
+                      </span>
+                    </li>
+                  ))}
+                  <div ref={messagesEndRef} />
+                </ul>
+
+                <div className="messageInput">
+                  <input
+                    type="text"
+                    id="messageInput"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Type your message..."
+                    ref={messageInputRef}
+                    onKeyDown={handleKeyPress} // Listen for Enter key press
+                  />
+                  <button
+                    id="sendButton"
+                    ref={sendButtonRef}
+                    onClick={sendMessage}
+                    aria-label="Send Message"
                   >
-                    <span className="messageSender">
-                      {isUserMessage ? "You" : msg.senderUsername || "Them"}
-                    </span>
-                    <span className="messageContent">
-                      {msg.content || "No content"}
-                    </span>
-                  </li>
-                );
-              })}
-            </ul>
-            <div className="messageInput">
-              <input
-                type="text"
-                id="messageInput"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Type your message..."
-                ref={messageInputRef}
-              />
-              <button
-                id="sendButton"
-                ref={sendButtonRef}
-                onClick={sendMessage}
-                aria-label="Send Message"
-              >
-                <BsSend size={18} />
-              </button>
-            </div>
+                    <BsSend size={18} />
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="noConversationSelected">
+                <p>Select a conversation or start a new one...</p>
+              </div>
+            )}
           </div>
         </div>
       </section>

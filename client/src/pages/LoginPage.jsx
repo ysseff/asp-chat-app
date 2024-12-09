@@ -16,7 +16,7 @@ const LoginPage = () => {
   const handleLogin = async (values) => {
     try {
       // Send login request to backend
-      const response = await axios.post("https://localhost:7052/api/Auth/login", {
+      const response = await axios.post("http://localhost:5002/api/Auth/login", {
         email: values.email,
         password: values.password,
       });

@@ -30,7 +30,7 @@ const RegisterPage = () => {
     console.log("Sending request with payload:", payload); // Log the request payload
   
     try {
-      const response = await axios.post("https://localhost:7052/api/Auth/register", payload);
+      const response = await axios.post("http://localhost:5002/api/Auth/register", payload);
       console.log("Response received:", response); // Log the response
   
       if (response.status === 200 || response.status === 201) {
