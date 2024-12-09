@@ -1,0 +1,38 @@
+/* Colors */
+:root {
+    --message-green: #a8f0c0;
+    --message-purple: #c5b8f9;
+    --chat-selection-purple: #c5b8f9;
+    --chat-background: #171717;
+    --profile-logout-hover: #27272a;
+    --text-field: #27272a;
+    --form-border: #38383b;
+  }
+/* General Page Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #171717;
+    margin: 0;
+    
+  }
+  /* Custom Toast Styles */
+.Toastify__toast {
+  background-color: var(--chat-background);
+  color: #fff;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.Toastify__toast--success,
+.Toastify__toast--error,
+.Toastify__toast--info {
+  background-color: var(--chat-background);
+  color: #fff;
+}
+
+.Toastify__close-button {
+  color: #fff;
+  font-size: 1.2rem;
+}

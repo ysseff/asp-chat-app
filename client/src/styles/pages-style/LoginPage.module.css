@@ -1,0 +1,173 @@
+/* Login Page Container */
+.loginPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--chat-background);
+}
+
+/* Login Form Container */
+.loginFormContainer {
+  background: var(--chat-background);
+  padding: 2rem;
+  border-radius: 15px;
+  width: 400px; /* Larger width for larger screens */
+  border: 1px solid var(--form-border);
+  text-align: center;
+  color: var(--text-field);
+}
+
+/* Heading */
+.loginFormContainer h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--message-green);
+}
+
+/* Form Group */
+.formGroup {
+  position: relative; /* To position icons properly */
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+/* Input Fields */
+.formGroup input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px solid var(--text-field);
+  border-radius: 10px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  box-sizing: border-box;
+  background-color: var(--text-field);
+  color: #ffffff;
+  transition: border 0.3s ease, background-color 0.3s ease;
+}
+
+.formGroup input:focus {
+  outline: none;
+  border: 2px solid var(--message-green);
+}
+
+/* Autofill Styles */
+.formGroup input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--text-field) inset;
+  box-shadow: 0 0 0 1000px var(--text-field) inset;
+  color: #ffffff; /* Set autofill text color to white */
+  font-weight: 600;
+}
+
+.formGroup input:-webkit-autofill::first-line {
+  color: #ffffff; /* Ensure text color remains white */
+}
+
+.formGroup input:focus:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--text-field) inset;
+  box-shadow: 0 0 0 1000px var(--text-field) inset;
+  color: #ffffff; /* Text remains white on focus */
+  border: 2px solid var(--message-green);
+  outline: none;
+}
+
+/* Input Error State */
+input.error {
+  border: 2px solid #9c2d25;
+  background-color: var(--text-field);
+}
+
+/* Password Toggle Icon */
+.passwordToggleIcon {
+  position: absolute;
+  top: 55%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #666; /* Adjust the color of the icon */
+}
+
+/* Login Button */
+.loginBtn {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: var(--message-green);
+  color: #000000;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.loginBtn:hover {
+  background-color: var(--profile-logout-hover);
+}
+
+/* Register Link */
+.registerLink {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #a1a1aa;
+}
+
+.registerLink a {
+  color: var(--message-green);
+  text-decoration: none;
+}
+
+.registerLink a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+
+/* Tablets */
+@media (max-width: 768px) {
+  .loginFormContainer {
+    padding: 1.5rem;
+    width: 85%;
+  }
+
+  .formGroup input {
+    font-size: 1.1rem;
+    padding: 0.7rem;
+  }
+
+  .loginBtn {
+    font-size: 0.9rem;
+  }
+
+  .registerLink {
+    font-size: 0.8rem;
+  }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+  .loginFormContainer {
+    padding: 1rem;
+    width: 95%;
+  }
+
+  .loginFormContainer h1 {
+    font-size: 1.5rem;
+  }
+
+  .formGroup input {
+    font-size: 1rem;
+    padding: 0.6rem;
+  }
+
+  .loginBtn {
+    font-size: 0.85rem;
+    padding: 0.6rem;
+  }
+
+  .registerLink {
+    font-size: 0.75rem;
+  }
+}
+

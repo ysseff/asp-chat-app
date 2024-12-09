@@ -1,0 +1,164 @@
+/* NewConvo Popup */
+.newConvo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4); 
+  backdrop-filter: blur(10px); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* NewConvo Content */
+.newConvoContent {
+  background-color: #09090c;
+  padding: 2rem;
+  border-radius: 15px;
+  width: 350px; 
+  max-width: 500px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: var(--text-field);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Header Section */
+.newConvoHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.headerTitle {
+  font-size: 1.8rem;
+  color: var(--message-green);
+  font-weight: 600;
+  margin: 0;
+  color: #ffffff;
+
+}
+
+/* Close Button */
+.closeBtn {
+  background: none;
+  border: none;
+  color: #a28080;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Label */
+.newConvoLabel {
+  margin: 1rem 0 0.5rem;
+  font-size: 1.2rem;
+  color: #848484;
+  text-align: left;
+  width: 100%;
+}
+
+/* Input Field */
+.newConvoInput {
+  width: 100%; 
+  max-width: 400px; 
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 2px solid var(--text-field);
+  border-radius: 10px;
+  background-color: var(--text-field);
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: 500;
+  box-sizing: border-box; 
+  transition: border 0.3s ease, background-color 0.3s ease;
+}
+
+.newConvoInput:focus {
+  outline: none;
+  border: 2px solid var(--message-green);
+}
+
+/* Start Conversation Button */
+.startConvoBtn {
+  background-color: var(--message-green);
+  color:var(--form-border);
+  padding: 0.8rem;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.startConvoBtn:hover {
+  background-color: var(--profile-logout-hover);
+  color:#ffffff;
+}
+/* Autofill Styles */
+.newConvoInput:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--text-field) inset;
+  box-shadow: 0 0 0 1000px var(--text-field) inset; 
+  color: #ffffff;
+  font-weight: 500; 
+}
+
+.newConvoInput:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--text-field) inset;
+  box-shadow: 0 0 0 1000px var(--text-field) inset;
+  color: #ffffff;
+  border: 2px solid var(--message-green); 
+}
+
+.newConvoInput:-webkit-autofill::first-line {
+  color: #ffffff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .newConvoContent {
+    width: 90%;
+    padding: 2rem;
+  }
+
+  .headerTitle {
+    font-size: 1.6rem;
+  }
+
+  .newConvoInput {
+    font-size: 1.1rem;
+    padding: 0.7rem;
+  }
+
+  .startConvoBtn {
+    font-size: 1rem;
+    padding: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .newConvoContent {
+    width: 95%;
+    padding: 1.5rem;
+  }
+
+  .headerTitle {
+    font-size: 1.4rem;
+  }
+
+  .newConvoInput {
+    font-size: 1rem;
+    padding: 0.6rem;
+  }
+
+  .startConvoBtn {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+}

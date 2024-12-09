@@ -1,0 +1,122 @@
+{
+  "users": [
+    {
+      "id": "c765",
+      "username": "abdo gemyyyy",
+      "firstName": "abdallah",
+      "lastName": "ahmed",
+      "email": "d28112003220@gmail.com",
+      "password": "Asd@123456",
+      "confirmPassword": "Asd@123456"
+    },
+    {
+      "id": "8c36",
+      "username": "abdo gemyy",
+      "firstName": "abdallah",
+      "lastName": "ahmed",
+      "email": "d2811200322@gmail.com",
+      "password": "Asd@123456",
+      "confirmPassword": "Asd@123456"
+    },
+    {
+      "id": "8183",
+      "username": "hello",
+      "firstName": "gemy",
+      "lastName": "gemy",
+      "email": "C76asdsdsd@gmail.com",
+      "password": "Asd@123456",
+      "confirmPassword": "Asd@123456"
+    },
+    {
+      "id": "f236",
+      "username": "abdo gemy "
+    }
+  ],
+  "conversations": [
+    {
+      "id": 1,
+      "name": "Chat with Alice"
+    },
+    {
+      "id": 2,
+      "name": "Chat with Bob"
+    }
+  ],
+  "messages": [
+    {
+      "conversationId": 1,
+      "user": "Alice",
+      "message": "Hello!"
+    },
+    {
+      "conversationId": 1,
+      "user": "You",
+      "message": "Hi Alice!"
+    },
+    {
+      "conversationId": 2,
+      "user": "Bob",
+      "message": "Hey there!"
+    },
+    {
+      "conversationId": 1,
+      "user": "Alice",
+      "message": "How are you?"
+    },
+    {
+      "conversationId": 1,
+      "user": "You",
+      "message": "I'm good, thanks! How about you?"
+    },
+    {
+      "conversationId": 1,
+      "user": "Alice",
+      "message": "I'm doing great, just working on a project."
+    },
+    {
+      "conversationId": 2,
+      "user": "Bob",
+      "message": "What are you up to?"
+    },
+    {
+      "conversationId": 2,
+      "user": "You",
+      "message": "Just relaxing, catching up on some work."
+    },
+    {
+      "conversationId": 2,
+      "user": "Bob",
+      "message": "Nice! We should catch up sometime."
+    },
+    {
+      "conversationId": 1,
+      "user": "You",
+      "message": "That sounds good. Let's do that soon."
+    },
+    {
+      "conversationId": 2,
+      "user": "Bob",
+      "message": "How about this weekend?"
+    },
+    {
+      "conversationId": 2,
+      "user": "You",
+      "message": "Perfect! Let's set a time."
+    },
+    {
+      "conversationId": 1,
+      "user": "Alice",
+      "message": "I was thinking about going to the movies. Want to join?"
+    },
+    {
+      "conversationId": 1,
+      "user": "You",
+      "message": "That sounds fun! I'm in."
+    },
+    {
+      "conversationId": 2,
+      "user": "Bob",
+      "message": "I have a few things to do, but I'll let you know."
+    }
+  ]
+}
