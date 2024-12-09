@@ -36,10 +36,7 @@ public static class DependencyInjection
         services.AddScoped<IUserProfileService, UserProfileService>();
         services.AddSignalR();
         
-
-        services.AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
+        
 
         services.AddAuthentication(options =>
         {
@@ -48,20 +45,7 @@ public static class DependencyInjection
         })
         .AddJwtBearer(o =>
         {
-            o.SaveToken = true;
-            o.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                // Replace the hard-coded key with something from configuration or user secrets in production
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("7JPdBxSGtQ8FFKjy8KM9y6dwcRNLlTi0")),
-                ValidateIssuer = true,
-                ValidIssuer = "MyChatAppBackend",
-                ValidateAudience = true,
-                ValidAudience = "MyChatAppBackend users",
-                ValidateLifetime = true,
-            };
-        }).AddJwtBearer(o =>
-        {
+            
             o.SaveToken = true;
             o.TokenValidationParameters = new TokenValidationParameters
             {
@@ -72,8 +56,24 @@ public static class DependencyInjection
                 ValidateAudience = true,
                 ValidAudience = "MyChatAppBackend users",
                 ValidateLifetime = true,
-                // Add the following line to map the `sub` claim from the token to ClaimTypes.NameIdentifier
                 NameClaimType = ClaimTypes.NameIdentifier
+            };
+            o.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    var accessToken = context.Request.Query["access_token"];
+
+                    // If the request is for our hub...
+                    var path = context.HttpContext.Request.Path;
+                    if (!string.IsNullOrEmpty(accessToken) &&
+                        (path.StartsWithSegments("/chathub")))
+                    {
+                        // Read the token out of the query string
+                        context.Token = accessToken;
+                    }
+                    return Task.CompletedTask;
+                }
             };
         });
         

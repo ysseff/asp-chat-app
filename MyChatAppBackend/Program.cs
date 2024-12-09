@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using MyChatAppBackend;
+using MyChatAppBackend.Entities;
 using MyChatAppBackend.Hubs;
+using MyChatAppBackend.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +22,13 @@ builder.Services.AddCors(options =>
             .SetIsOriginAllowed(origin => true);
     });
 });
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = true;
+    })
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
 
 builder.Services.AddDependencies(builder.Configuration);
 // Add more services similarly
