@@ -68,10 +68,10 @@ namespace MyChatAppBackend.Services
                     conversationResponses.Add(new ConversationResponse
                     {
                         ConversationId = conversation.Id,
-                        SenderId = userId,
-                        SenderUserName = userName,
-                        ReceiverId = otherUser.Id,
-                        ReceiverUserName = otherUser.UserName!
+                        User1Id = userId,
+                        User1UserName = userName,
+                        User2Id = otherUser.Id,
+                        User2UserName = otherUser.UserName!
                     });
                 }
             }
@@ -114,15 +114,11 @@ namespace MyChatAppBackend.Services
             return new ConversationResponse
             {
                 ConversationId = conversation.Id,
-                SenderId = currentUserId,
-                SenderUserName = currentUserName,
-                ReceiverId = otherUser.Id,
-                ReceiverUserName = otherUser.UserName!
+                User1Id = currentUserId,
+                User1UserName = currentUserName,
+                User2Id = otherUser.Id,
+                User2UserName = otherUser.UserName!
             };
         }
-        
-        
     }
-    
-    
 }
