@@ -9,7 +9,7 @@ namespace MyChatAppBackend.Services
     public class ConversationService(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
         : IConversationService
     {
-        public async Task<ConversationResponse?> StartConversationAsync(string user1Id, string user2Id, CancellationToken cancellationToken = default)
+        public async Task<ConversationResponse?> StartConversationAsync(string user1Id, string user1UserName, string user2Id, CancellationToken cancellationToken = default)
         {
             if (user1Id == user2Id) return null;
             
@@ -23,10 +23,10 @@ namespace MyChatAppBackend.Services
             var conversation = new Conversation { User1Id = user1Id, User2Id = user2Id };
             dbContext.Conversations.Add(conversation);
             await dbContext.SaveChangesAsync(cancellationToken);
-            return await MapToConversationResponse(conversation, user1Id, cancellationToken);
+            return await MapToConversationResponse(conversation, user1Id, user1UserName, cancellationToken);
         }
 
-        public async Task<ConversationResponse?> StartConversationAsync(string user1Id, StartConversationRequest request, CancellationToken cancellationToken = default)
+        public async Task<ConversationResponse?> StartConversationAsync(string user1Id, string user1UserName, StartConversationRequest request, CancellationToken cancellationToken = default)
         {
             // Find the other user by email or username
             ApplicationUser? otherUser = null;
@@ -46,10 +46,10 @@ namespace MyChatAppBackend.Services
                 return null;
             }
 
-            return await StartConversationAsync(user1Id, otherUser.Id, cancellationToken);
+            return await StartConversationAsync(user1Id, user1UserName,  otherUser.Id, cancellationToken);
         }
 
-        public async Task<List<ConversationResponse>> GetUserConversationsAsync(string userId, CancellationToken cancellationToken = default)
+        public async Task<List<ConversationResponse>> GetUserConversationsAsync(string userId, string userName, CancellationToken cancellationToken = default)
         {
             var conversations = await dbContext.Conversations
                 .Where(c => c.User1Id == userId || c.User2Id == userId)
@@ -68,8 +68,10 @@ namespace MyChatAppBackend.Services
                     conversationResponses.Add(new ConversationResponse
                     {
                         ConversationId = conversation.Id,
+                        SenderId = userId,
+                        SenderUserName = userName,
                         ReceiverId = otherUser.Id,
-                        ReceiverUsername = otherUser.UserName
+                        ReceiverUserName = otherUser.UserName!
                     });
                 }
             }
@@ -102,7 +104,7 @@ namespace MyChatAppBackend.Services
             await dbContext.SaveChangesAsync(cancellationToken);
             return true;
         }
-        private async Task<ConversationResponse?> MapToConversationResponse(Conversation conversation, string currentUserId, CancellationToken cancellationToken)
+        private async Task<ConversationResponse?> MapToConversationResponse(Conversation conversation, string currentUserId, string currentUserName, CancellationToken cancellationToken)
         {
             var otherUserId = conversation.User1Id == currentUserId ? conversation.User2Id : conversation.User1Id;
 
@@ -112,8 +114,10 @@ namespace MyChatAppBackend.Services
             return new ConversationResponse
             {
                 ConversationId = conversation.Id,
+                SenderId = currentUserId,
+                SenderUserName = currentUserName,
                 ReceiverId = otherUser.Id,
-                ReceiverUsername = otherUser.UserName
+                ReceiverUserName = otherUser.UserName!
             };
         }
         

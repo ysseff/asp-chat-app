@@ -1,0 +1,39 @@
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+.idea
+.appsettings.json
+.DS_Store
+# Ignore appsettings.json to keep secrets out of the repo
+appsettings.json
+
+# Ignore environment-specific config files
+appsettings.*.json
+
+# Ignore build outputs
+bin/
+obj/
+
+# Ignore user-specific IDE files
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore JetBrains Rider / IntelliJ files
+.idea/
+
+# Ignore Mac OS files
+.DS_Store
+
+# Ignore Node.js dependencies if you have a frontend in the same repo
+node_modules/
+
+# Ignore User Secrets directory (if you use dotnet user-secrets)
+**/UserSecrets/
+
+# Other common ignores
+*.log

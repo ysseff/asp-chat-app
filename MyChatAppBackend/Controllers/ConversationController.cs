@@ -16,9 +16,11 @@ namespace MyChatAppBackend.Controllers
         public async Task<IActionResult> StartConversation([FromBody] StartConversationRequest request, CancellationToken cancellationToken)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userName = User.Claims.FirstOrDefault(c => c.Type == "username").Value;
+
             try
             {
-                var conversation = await conversationService.StartConversationAsync(userId, request, cancellationToken);
+                var conversation = await conversationService.StartConversationAsync(userId, userName, request, cancellationToken);
                 return conversation == null ? BadRequest("fuck off") : Ok(conversation);
             }
             catch (KeyNotFoundException)
@@ -31,7 +33,8 @@ namespace MyChatAppBackend.Controllers
         public async Task<IActionResult> GetMyConversations(CancellationToken cancellationToken)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var conversations = await conversationService.GetUserConversationsAsync(userId, cancellationToken);
+            var userName = User.Claims.FirstOrDefault(c => c.Type == "username").Value;
+            var conversations = await conversationService.GetUserConversationsAsync(userId, userName, cancellationToken);
             return Ok(conversations);
         }
 
@@ -47,7 +50,7 @@ namespace MyChatAppBackend.Controllers
         public async Task<IActionResult> DeleteConversation(int conversationId, CancellationToken cancellationToken)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var deleted = await conversationService.DeleteConversationAsync(conversationId, userId, cancellationToken);
+            var deleted = await conversationService.DeleteConversationAsync(conversationId, userId!, cancellationToken);
             if (!deleted)
                 return BadRequest("Conversation not found or you are not authorized to delete it.");
     
