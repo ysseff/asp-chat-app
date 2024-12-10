@@ -1,129 +1,46 @@
-import React, { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext"; // Import the useAuth hook
-import styles from "../styles/components-style/profile.module.css"; // Import the CSS Module
+import React, { createContext, useState, useEffect, useContext } from "react";
 
-const Profile = ({ toggleProfile }) => {
-  const { user } = useAuth(); // Get user data from AuthContext
-  const [formData, setFormData] = useState({
-    email: "",
-    username: "",
-    firstName: "",
-    lastName: ""
-  });
+// Create Context
+const AuthContext = createContext();
 
-  // Update formData when user data changes
+// AuthProvider component
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+
+  // Simulating an authentication check (replace this with actual logic)
   useEffect(() => {
-    if (user) {
-      setFormData({
-        email: user.email || "",
-        username: user.username || "",
-        firstName: user.firstName || "",
-        lastName: user.lastName || ""
-      });
-    }
-  }, [user]); // Run the effect when user data changes
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const storedToken = localStorage.getItem("userToken"); // Get token from localStorage
 
-  // Handle input changes to update formData
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [id]: value }));
+    if (storedUser && storedToken) {
+      setUser(storedUser);
+      setToken(storedToken); // Set token if available
+    }
+  }, []); // Empty dependency array to run once on mount
+
+  const login = (user, token) => {
+    setUser(user);
+    setToken(token);
+    localStorage.setItem("user", JSON.stringify(user)); // Store user in localStorage
+    localStorage.setItem("userToken", token); // Store token in localStorage
   };
 
-  // Handle form submission (e.g., save profile changes)
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    // You can add logic to send data to an API here, or trigger some other action.
+  const logout = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem("user"); // Remove user from localStorage
+    localStorage.removeItem("userToken"); // Remove token from localStorage
   };
 
   return (
-    <div className={styles.profilePopup}>
-      <div className={styles.profileContent}>
-        <header className={styles.profileHeader}>
-          <h2 className={styles.profileTitle}>Profile</h2>
-          {/* Close button that toggles the profile popup */}
-          <button
-            className={styles.closeBtn}
-            onClick={toggleProfile} // Close the profile popup when clicked
-          >
-            &times;
-          </button>
-        </header>
-
-        <form onSubmit={handleSubmit} className={styles.profileForm}>
-          {/* Email field */}
-          <div className={styles.profileField}>
-            <label htmlFor="email" className={styles.profileLabel}>
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="example@domain.com"
-              className={styles.profileInput}
-            />
-          </div>
-
-          {/* Username field */}
-          <div className={styles.profileField}>
-            <label htmlFor="username" className={styles.profileLabel}>
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              value={formData.username}
-              onChange={handleChange}
-              placeholder="User123"
-              className={styles.profileInput}
-            />
-          </div>
-
-          {/* First Name field */}
-          <div className={styles.profileField}>
-            <label htmlFor="firstName" className={styles.profileLabel}>
-              First Name
-            </label>
-            <input
-              type="text"
-              id="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              placeholder="John"
-              className={styles.profileInput}
-            />
-          </div>
-
-          {/* Last Name field */}
-          <div className={styles.profileField}>
-            <label htmlFor="lastName" className={styles.profileLabel}>
-              Last Name
-            </label>
-            <input
-              type="text"
-              id="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              placeholder="Doe"
-              className={styles.profileInput}
-            />
-          </div>
-
-          {/* Buttons to save changes or reset password */}
-          <div className={styles.profileButtons}>
-            <button type="submit" className={styles.editProfileBtn}>
-              Edit Profile
-            </button>
-            <button type="button" className={styles.resetPasswordBtn}>
-              Reset Password
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <AuthContext.Provider value={{ user, token, login, logout }}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 
-export default Profile;
+// Custom hook to use AuthContext
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
