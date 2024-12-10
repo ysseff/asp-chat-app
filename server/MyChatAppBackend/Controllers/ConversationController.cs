@@ -1,8 +1,10 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using MyChatAppBackend.Contracts;
 using MyChatAppBackend.Entities;
+using MyChatAppBackend.Hubs;
 using MyChatAppBackend.Services;
 
 namespace MyChatAppBackend.Controllers
@@ -13,7 +15,7 @@ namespace MyChatAppBackend.Controllers
     public class ConversationsController(IConversationService conversationService) : ControllerBase
     {
         [HttpPost("start")]
-        public async Task<IActionResult> StartConversation([FromBody] StartConversationRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> StartConversation([FromBody] StartConversationRequest request, [FromServices] IHubContext<ChatHub> hubContext,CancellationToken cancellationToken)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userName = User.Claims.FirstOrDefault(c => c.Type == "username").Value;
@@ -21,7 +23,14 @@ namespace MyChatAppBackend.Controllers
             try
             {
                 var conversation = await conversationService.StartConversationAsync(userId, userName, request, cancellationToken);
-                return conversation == null ? BadRequest("fuck off") : Ok(conversation);
+                if (conversation == null)
+                {
+                    return BadRequest("User not found");
+                }
+                var otherUserId = conversation.User1Id == userId ? conversation.User2Id : conversation.User1Id;
+                await hubContext.Clients.User(otherUserId)
+                    .SendAsync("ReceiveNewConversation", conversation, cancellationToken);
+                return Ok(conversation);
             }
             catch (KeyNotFoundException)
             {
