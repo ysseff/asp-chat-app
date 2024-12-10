@@ -11,11 +11,13 @@ import { FiMessageSquare } from "react-icons/fi";
 import { LuUserRound } from "react-icons/lu";
 import { MdLogout } from "react-icons/md";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import Profile from "../components/Profile"; // Import Profile component
 
 const DashboardPage = () => {
   const navigate = useNavigate(); // Initialize navigate function
   const [conversations, setConversations] = useState([]);
   const [showNewConvo, setShowNewConvo] = useState(false);
+  const [showProfilePopup, setShowProfilePopup] = useState(false); // State to toggle profile popup
   const [message, setMessage] = useState("");
   const [messagesList, setMessagesList] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
@@ -217,9 +219,9 @@ const DashboardPage = () => {
     }
   };
 
-  // Generate RoboHash URL for a user
-  const generateProfilePicture = (userId) => {
-    return `https://robohash.org/${userId}?set=set4&size=50x50`;
+  // Toggle profile popup
+  const toggleProfilePopup = () => {
+    setShowProfilePopup((prevState) => !prevState);
   };
 
   return (
@@ -264,13 +266,11 @@ const DashboardPage = () => {
             )}
 
             <div className="userActions">
-              <div className="Profile">
+              <div className="Profile" onClick={toggleProfilePopup}>
                 <LuUserRound size={20} className="userIcon" />
                 <p>Profile</p>
               </div>
               <div className="Logout" onClick={logout}>
-                {" "}
-                {/* Attach logout here */}
                 <MdLogout size={20} className="logoutIcon" />
                 <p>Logout</p>
               </div>
@@ -333,6 +333,11 @@ const DashboardPage = () => {
           updateConversations={setConversations}
           conversations={conversations}
         />
+      )}
+
+      {/* Profile Popup */}
+      {showProfilePopup && (
+        <Profile toggleProfile={toggleProfilePopup} />
       )}
 
       <ToastContainer />

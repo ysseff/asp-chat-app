@@ -2,6 +2,7 @@
 :root {
     --message-green: #a8f0c0;
     --message-purple: #c5b8f9;
+    --message-purple-light: #d2c1f9; /* Lighter purple for transition */
     --chat-selection-purple: #c5b8f931;
     --chat-background: #171717;
     --profile-logout-hover: #27272a;

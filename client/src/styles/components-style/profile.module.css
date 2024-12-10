@@ -1,0 +1,201 @@
+/* Profile Popup */
+.profilePopup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4); 
+  backdrop-filter: blur(10px); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Profile Content */
+.profileContent {
+  background-color: #09090c;
+  padding: 2rem;
+  border-radius: 15px;
+  width: 350px;
+  max-width: 500px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Header Section */
+.profileHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.profileTitle {
+  font-size: 1.8rem;
+  color: #34b3a0;  /* Green color */
+  font-weight: 600;
+  margin: 0;
+  color: #ffffff;
+}
+
+/* Close Button */
+.closeBtn {
+  background: none;
+  border: none;
+  color: #a28080;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.closeBtn:hover {
+  color: #34b3a0;  /* Same hover color as title */
+}
+
+/* Label */
+.profileLabel {
+  text-align: left;
+  margin: 1rem 0 0.5rem;
+  font-size: 1.2rem;
+  color: #848484;
+  width: 100%;  /* Ensure it spans the full width */
+}
+
+/* Input Fields */
+.profileInput {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.8rem;
+  border: 2px solid #444;
+  border-radius: 10px;
+  background-color: var(--text-field);
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 500;
+  box-sizing: border-box;
+  transition: border 0.3s ease, background-color 0.3s ease;
+  margin-left: 0;  /* Remove left margin */
+}
+
+/* Flexbox container for label and input */
+.profileField {
+  display: flex;
+  flex-direction: column;  /* Stack label and input vertically */
+  width: 330px; 
+}
+
+.profileInput:focus {
+  outline: none;
+  border: 2px solid #34b3a0;  /* Green focus border */
+}
+
+/* Buttons */
+.profileButtons {
+  display: flex;
+  flex-direction: column;  /* Stack buttons vertically */
+  width: 100%;
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+/* Buttons */
+.editProfileBtn,
+.resetPasswordBtn {
+  padding: 0.8rem;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 10px;
+  width: 100%;  /* Full width for the buttons */
+  margin-bottom: 1rem;  /* Space between buttons */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.editProfileBtn {
+  background-color: #a0dcac;  /* Green background */
+  color: #000000;
+}
+
+.editProfileBtn:hover {
+  background-color: var(--message-green);
+  color: #000;
+}
+
+.resetPasswordBtn {
+  background-color: var(--message-purple);  /* Green background */
+  color: #000000;
+}
+
+.resetPasswordBtn:hover {
+  background-color: var(--message-purple-light);
+}
+
+/* Autofill Styles */
+.profileInput:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px var(--text-field)inset;
+  box-shadow: 0 0 0 1000px var(--text-field)inset;
+  color: #fff;
+  font-weight: 500;
+}
+
+.profileInput:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--text-field) inset;
+  box-shadow: 0 0 0 1000px var(--text-field)inset;
+  color: #fff;
+  border: 2px solid#a0dcac;
+}
+
+.profileInput:-webkit-autofill::first-line {
+  color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .profileContent {
+    width: 90%;
+    padding: 2rem;
+  }
+
+  .profileTitle {
+    font-size: 1.6rem;
+  }
+
+  .profileInput {
+    font-size: 1.1rem;
+    padding: 0.7rem;
+  }
+
+  .editProfileBtn,
+  .resetPasswordBtn {
+    font-size: 1rem;
+    padding: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profileContent {
+    width: 95%;
+    padding: 1.5rem;
+  }
+
+  .profileTitle {
+    font-size: 1.4rem;
+  }
+
+  .profileInput {
+    font-size: 1rem;
+    padding: 0.6rem;
+  }
+
+  .editProfileBtn,
+  .resetPasswordBtn {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+}
