@@ -1,0 +1,6 @@
+Folder PATH listing for volume Data Drive
+Volume serial number is D1D6-EFC0
+D:\PROJECTS\ASP-CHAT-APP\CLIENT\-L2
+Invalid path - \PROJECTS\ASP-CHAT-APP\CLIENT\-L2
+No subfolders exist 
+

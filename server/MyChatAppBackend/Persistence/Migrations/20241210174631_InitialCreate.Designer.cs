@@ -12,7 +12,7 @@ using MyChatAppBackend.Persistence;
 namespace MyChatAppBackend.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241209122807_InitialCreate")]
+    [Migration("20241210174631_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

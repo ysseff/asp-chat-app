@@ -7,13 +7,19 @@ import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 import styles from "../styles/pages-style/LoginPage.module.css"; // Import the CSS module
+import { useAuth } from "../context/AuthContext"; // Import AuthContext
+
+
 
 const RegisterPage = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { login } = useAuth(); // Destructure login from useAuth
 
   const navigate = useNavigate();
+
+
   const handleRegister = async (values) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
@@ -21,7 +27,7 @@ const RegisterPage = () => {
     // Prepare the payload with the required key names
     const payload = {
       email: values.email,
-      userName: values.username,  
+      userName: values.username,
       password: values.password,
       firstName: values.firstName,
       lastName: values.lastName,
@@ -35,6 +41,16 @@ const RegisterPage = () => {
   
       if (response.status === 200 || response.status === 201) {
         toast.success("Registration successful!");
+  
+        // Get user and token from the response (ensure it's part of the response)
+        const { user, token } = response.data;
+  
+        // Use the login function from AuthContext to update user and token
+        login(user, token); // Ensure login function is imported and available
+  
+        console.log("User logged in:", user); // Debug log to confirm user state
+  
+        // Redirect to dashboard after successful login
         navigate("/dashboard");
       } else {
         toast.error("Registration failed. Please try again.");
@@ -49,16 +65,13 @@ const RegisterPage = () => {
         toast.error(errorMessage);
       } else {
         // Generic error
-        toast.error(
-          error.response?.data?.message || "An error occurred. Please try again."
-        );
+        toast.error(error.response?.data?.message || "An error occurred. Please try again.");
       }
     } finally {
       setIsSubmitting(false);
     }
   };
-  
-  
+
 
   const formik = useFormik({
     initialValues: {

@@ -16,7 +16,6 @@ body {
     margin: 0;
     
   }
-  /* Custom Toast Styles */
 .Toastify__toast {
   background-color: var(--chat-background);
   color: #fff;

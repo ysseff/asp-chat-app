@@ -54,14 +54,14 @@ const DashboardPage = () => {
   // Setup SignalR only when token is available
   useEffect(() => {
     if (!token) return;
-
+  
     const newConnection = new signalR.HubConnectionBuilder()
       .withUrl("http://localhost:5002/chathub", {
         accessTokenFactory: () => token,
       })
       .withAutomaticReconnect()
       .build();
-
+  
     newConnection
       .start()
       .then(() => {
@@ -84,18 +84,23 @@ const DashboardPage = () => {
             console.log("New message for another conversation:", msg);
           }
         });
-
+  
         newConnection.on("ReceiveNewConversation", (conversation) => {
-          setConversations((prev) => [...prev, conversation]);
+          // Remap the conversations array to include the new conversation at the end
+          setConversations((prevConversations) => {
+            const updatedConversations = [...prevConversations, conversation];
+            return updatedConversations; // Return the new array with the added conversation at the end
+          });
           toast.info("A new conversation has been started!");
         });
       })
       .catch((err) => console.error("Error starting SignalR connection:", err));
-
+  
     return () => {
       newConnection.stop();
     };
   }, [token, selectedConversation]);
+  
 
   // Scroll to bottom when messagesList updates
   useEffect(() => {
