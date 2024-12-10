@@ -28,8 +28,8 @@ namespace MyChatAppBackend.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             try
             {
-                await userProfileService.UpdateUserProfileAsync(userId, request, cancellationToken);
-                return Ok("Profile updated successfully");
+                var response = await userProfileService.UpdateUserProfileAsync(userId, request, cancellationToken);
+                return Ok(response);
             }
             catch (System.InvalidOperationException ex)
             {
