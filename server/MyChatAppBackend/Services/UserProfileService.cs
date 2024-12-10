@@ -51,13 +51,13 @@ namespace MyChatAppBackend.Services
                 shouldUpdate = true;
             }
 
-            if (!string.IsNullOrEmpty(request.FirstName))
+            if (!string.IsNullOrEmpty(request.FirstName) && request.FirstName != user.FirstName)
             {
                 user.FirstName = request.FirstName;
                 shouldUpdate = true;
             }
 
-            if (!string.IsNullOrEmpty(request.LastName))
+            if (!string.IsNullOrEmpty(request.LastName) && request.LastName != user.LastName)
             {
                 user.LastName = request.LastName;
                 shouldUpdate = true;
