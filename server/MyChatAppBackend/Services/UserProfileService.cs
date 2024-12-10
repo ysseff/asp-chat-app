@@ -41,13 +41,13 @@ namespace MyChatAppBackend.Services
                 shouldUpdate = true;
             }
 
-            if (!string.IsNullOrEmpty(request.Username) && request.Username != user.UserName)
+            if (!string.IsNullOrEmpty(request.UserName) && request.UserName != user.UserName)
             {
-                var usernameUser = await userManager.FindByNameAsync(request.Username);
+                var usernameUser = await userManager.FindByNameAsync(request.UserName);
                 if (usernameUser != null)
                     throw new System.InvalidOperationException("Username is already taken");
 
-                user.UserName = request.Username;
+                user.UserName = request.UserName;
                 shouldUpdate = true;
             }
 
@@ -73,7 +73,7 @@ namespace MyChatAppBackend.Services
             {
                 Id = user.Id,
                 Email = user.Email ?? string.Empty,
-                Username = user.UserName ?? string.Empty,
+                UserName = user.UserName ?? string.Empty,
                 FirstName = user.FirstName ?? string.Empty,
                 LastName = user.LastName ?? string.Empty,
                 token = token,

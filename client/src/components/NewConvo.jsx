@@ -63,10 +63,10 @@ const NewConvo = ({ togglePopup, updateConversations, conversations }) => {
       return;
     }
 
-    if (!isTokenReady) {
-      toast.error("Token not available. Please login first.");
-      return;
-    }
+    // if (!isTokenReady) {
+    //   toast.error("Token not available. Please login first.");
+    //   return;
+    // }
 
     setLoading(true);
 
@@ -89,20 +89,11 @@ const NewConvo = ({ togglePopup, updateConversations, conversations }) => {
         }
       );
 
-      console.log("Response from API:", response);
-
       if (response.status === 200) {
         const conversation = response.data;
         toast.success("Conversation started successfully!");
-
         // Add conversation to the local state
         updateConversations([ conversation,...conversations]);
-
-        // Notify SignalR hub
-        if (connection) {
-          await connection.invoke("SendNewConversation", conversation);
-        }
-
         togglePopup();
       } else {
         toast.error("Failed to start conversation. Please try again.");

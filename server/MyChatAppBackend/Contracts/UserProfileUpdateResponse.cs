@@ -4,7 +4,7 @@ namespace MyChatAppBackend.Contracts
     {
         public string Id { get; set; } = default!;
         public string Email { get; set; } = default!;
-        public string Username { get; set; } = default!;
+        public string UserName { get; set; } = default!;
         public string FirstName { get; set; } = default!;
         public string LastName { get; set; } = default!;
         public string token { get; set; } = default!;
