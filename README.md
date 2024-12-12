@@ -44,6 +44,7 @@ This project is a Real-Time Chat Application built using modern web technologies
 
 ## File Structure
 
+```
 ├── client/
 │   ├── src/
 │   │   ├── components/
@@ -69,7 +70,7 @@ This project is a Real-Time Chat Application built using modern web technologies
 │   │   └── …
 ├── asp-chat-app.sln
 └── README.md
-
+```
 
 ## Setup and Installation
 
