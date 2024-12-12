@@ -44,14 +44,17 @@ This project is a Real-Time Chat Application built using modern web technologies
 
 ## File Structure
 
-asp-chat-app/
 ├── client/
 │   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── App.jsx
+│   │   └── …
 │   ├── public/
 │   ├── .gitignore
 │   ├── package.json
 │   ├── vite.config.js
-│   └── ...
+│   └── …
 ├── server/
 │   ├── MyChatAppBackend/
 │   │   ├── Authentication/
@@ -63,7 +66,7 @@ asp-chat-app/
 │   │   ├── Services/
 │   │   ├── appsettings.json
 │   │   ├── Program.cs
-│   │   └── ...
+│   │   └── …
 ├── asp-chat-app.sln
 └── README.md
 
